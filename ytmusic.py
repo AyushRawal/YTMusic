@@ -78,7 +78,9 @@ def main(args):
                 'writethumbnail': True,
                 'verbose': False,
                 'postprocessors': [{'key': 'FFmpegMetadata'}],
-                'progress_hooks': [my_hook]}
+                'progress_hooks': [my_hook],
+                'cachedir' : False
+                }
 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
 
@@ -168,7 +170,7 @@ def main(args):
         if args.autoplay:
             url = next_url(url)
             result = ydl.extract_info(url, download=False)
-            print(("{}{}Title:{} " + result['title'] + "\n").format(
+            print(("{}{}" + result['title'] + "{}\n").format(
                 Style.BRIGHT, Fore.YELLOW, Style.RESET_ALL))
         else:
             break
