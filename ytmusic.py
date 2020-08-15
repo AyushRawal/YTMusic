@@ -157,9 +157,11 @@ def main(args):
     while True:
         if (args.download):
             ydl.download([url])
-            os.system('AtomicParsley "' + filename + '" --artwork "' + filename.replace(filename.split('.')[-1], "jpg") + '" -o tmp.m4a')
+            os.system('ffmpeg -loglevel panic -i "' + filename.replace(filename.split('.')[-1], "webp") + '" tmp.png')
+            os.system('AtomicParsley "' + filename + '" --artwork tmp.png -o tmp.m4a')
             os.remove(filename)
-            os.remove(filename.replace(filename.split('.')[-1], "jpg"))
+            os.remove(filename.replace(filename.split('.')[-1], "webp"))
+            os.remove("tmp.png")
             os.rename("tmp.m4a", filename)
             print("\nDownload complete.\n")
 
