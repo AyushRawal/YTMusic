@@ -10,29 +10,51 @@ import requests
 from sys import exit
 
 
+def my_hook(d):
+    if d['status'] == 'finished':
+        file_tuple = os.path.split(os.path.abspath(d['filename']))
+        print("\nDone downloading {}".format(file_tuple[1]))
+    if d['status'] == 'downloading':
+        print(f"Downloading : {d['_percent_str']}  Time Remaining : {d['_eta_str']}", end="\r")
+
+
+ydl_opts = {'outtmpl': '%(title)s.%(ext)s',
+            'quiet': True,
+            'format': '140',
+            'verbose': False,
+            'postprocessors': [{'key': 'FFmpegMetadata'}],
+            'progress_hooks': [my_hook],
+            'cachedir' : False
+            }
+
+ydl = youtube_dl.YoutubeDL(ydl_opts)
+
+
+played_ids = []
+
+
 def arguments():
 
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "Song_Name", help="Name of the song to search", type=str, nargs="*")
-    parser.add_argument(
         "-o", "--options",
-        help="Display options to choose from",
+        help="Display a list of songs to choose from",
         action="store_true")
     parser.add_argument(
         "-a", "--autoplay",
-        help="Start playing similar songs after the requested song",
+        help="Start playing similar songs after the requested song or playlist",
         action="store_true")
     parser.add_argument(
         "-d", "--download",
-        help="Download the song instead of playing it.\
+        help="Download the song or playlist instead of playing it.\
         Be careful while passing this with -a as it can\
         cause a large number of downloads",
         action="store_true")
     parser.add_argument(
-        "-v", "--verbose",
-        help="Verbose output",
+        "-u", "--url",
+        help="Ask for playlist url instead of song. Play / Download songs from the given url.\
+        Passing -o with it will not work.",
         action="store_true")
 
     args = parser.parse_args()
@@ -40,22 +62,9 @@ def arguments():
     return args
 
 
-def my_hook(d):
-    if d['status'] == 'finished':
-        file_tuple = os.path.split(os.path.abspath(d['filename']))
-        global filename
-        filename = file_tuple[1]
-        print("\nDone downloading {}".format(file_tuple[1]))
-    if d['status'] == 'downloading':
-        print(f"Downloading : {d['_percent_str']}  Time Remaining : {d['_eta_str']}", end="\r")
-
-
 def duration_format(duration):
-    return "{0:0=2d}".format(duration // 60) + " m  " +\
-        "{0:0=2d}".format(duration % 60) + " s"
-
-
-played_ids = []
+    return "{:02d}".format(int(duration // 60)) + " m  " +\
+        "{:02d}".format(int(duration % 60)) + " s"
 
 
 def next_url(url):
@@ -70,53 +79,46 @@ def next_url(url):
             return "https://www.youtube.com" + id
 
 
-def main(args):
-
-    ydl_opts = {'outtmpl': '%(title)s.%(ext)s',
-                'quiet': not args.verbose,
-                'format': '140',
-                'writethumbnail': True,
-                'verbose': False,
-                'postprocessors': [{'key': 'FFmpegMetadata'}],
-                'progress_hooks': [my_hook],
-                'cachedir' : False
-                }
-
-    ydl = youtube_dl.YoutubeDL(ydl_opts)
-
-    if not args.Song_Name:
-        print("Song name is required!!! Run ytmusic --help for help.")
-        exit(-1)
-
-    if (len(args.Song_Name) > 1):
-        song_name = ' '.join(args.Song_Name)
+def download_or_play(entry, download):
+    url = entry['webpage_url']
+    played_ids.append("/watch?v=" + entry['id'])
+    print(("\n{}{}" + entry['title'] +
+        "{}\n").format(Style.BRIGHT, Fore.YELLOW, Style.RESET_ALL))
+    if (download):
+        ydl.download([url])
+        print("\nDownload complete.\n")
     else:
-        song_name = args.Song_Name[0]
+        os.system("mpv --no-video " + url)
+    return(url)
+
+
+def main(args):
 
     init()
 
-    print(("\nSearching {}{}'" + song_name +
-           "'{} on YouTube...\n").format(Style.BRIGHT,
-                                         Fore.CYAN, Style.RESET_ALL))
+    if (not args.url):
+        song_name = input("Enter song name to search for : ")
+        print(("\nSearching {}{}'" + song_name +
+            "'{} on YouTube...").format(Style.BRIGHT,
+                                            Fore.CYAN, Style.RESET_ALL))
+        if args.options:
+            search_query = "ytsearch5:" + song_name
+        else:
+            search_query = "ytsearch:" + song_name
+    else:
+        search_query = input("Enter the playlist url : ")
 
-    with ydl:
-        try:
-            if args.options:
-                result = ydl.extract_info(
-                    "ytsearch5:" + song_name, download=False)
-            else:
-                result = ydl.extract_info(
-                    "ytsearch:" + song_name, download=False)
-        except Exception as e:
-            print("\nSomething is wrong.",
-                  "Try checking your internet connection.\n [EXCEPTION]", e)
-            exit(1)
+    try:
+        result = ydl.extract_info(
+                    search_query, download=False)
+    except Exception as e:
+        print("\nSomething is wrong.",
+            "Try checking your internet connection.\n [EXCEPTION]", e)
+        exit(1)
 
     if 'entries' in result:
-        if not args.options:
-            print(("{}{}" + result['entries'][0]['title'] +
-                   "{}\n").format(Style.BRIGHT, Fore.YELLOW, Style.RESET_ALL))
-        else:
+        if args.options or args.url:
+            print("\n")
             table = prettytable.PrettyTable()
             table.hrules = prettytable.HEADER
             table.vrules = prettytable.NONE
@@ -126,10 +128,9 @@ def main(args):
                 for field_name in table.field_names]
             table.align = "l"
             table.right_padding_width = 5
-            for i in range(0, 5):
-                table.add_row([i + 1, duration_format(result['entries']
-                                                      [i]['duration']),
-                               result['entries'][i]['title']])
+            for i, entry in enumerate(result['entries'], start=1):
+                table.add_row([i, duration_format(entry['duration']),
+                            entry['title']])
             print(table)
     else:
         print("That didn't work. Try something else..\n")
@@ -137,46 +138,32 @@ def main(args):
 
     index = 0
 
-    while (args.options):
+    while (args.options and not args.url):
         try:
             index = int(input("\nEnter the song number (default:1) : ")) - 1
         except ValueError:
             pass
-        print("\n")
         if index == -1:
             print("\nExiting")
             exit(0)
-        elif (index <= i and index >= 0):
+        elif (index <= 5 and index >= 0):
             break
         else:
             print ("Wrong Input ! Try Again..")
 
-    url = result['entries'][index]['webpage_url']
-    played_ids.append("/watch?v=" + result['entries'][index]['id'])
+    url = ""
+    if not args.url:
+        url = download_or_play(result['entries'][index], args.download)
 
-    while True:
-        if (args.download):
-            ydl.download([url])
-            os.system('ffmpeg -loglevel panic -i "' + filename.replace(filename.split('.')[-1], "webp") + '" tmp.png')
-            os.system('AtomicParsley "' + filename + '" --artwork tmp.png -o tmp.m4a')
-            os.remove(filename)
-            os.remove(filename.replace(filename.split('.')[-1], "webp"))
-            os.remove("tmp.png")
-            os.rename("tmp.m4a", filename)
-            print("\nDownload complete.\n")
+    else:
+        for entry in result['entries']:
+            url = download_or_play(entry, args.download)
 
-        else:
-            os.system("mpv --no-video " + url)
-            print("\n")
-
-        if args.autoplay:
+    if args.autoplay:
+        while True:
             url = next_url(url)
             result = ydl.extract_info(url, download=False)
-            print(("{}{}" + result['title'] + "{}\n").format(
-                Style.BRIGHT, Fore.YELLOW, Style.RESET_ALL))
-        else:
-            break
-
+            download_or_play(result, args.download)
 
 if __name__ == "__main__":
     try:
