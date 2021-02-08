@@ -1,6 +1,6 @@
 <h1 align=center>YTMusic</h1><br>
 
-<center><img src="https://img.shields.io/github/stars/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/github/forks/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/badge/Category-Music-blue?style=flat-square"> <img src="https://img.shields.io/badge/Category-CLI-green?style=flat-square"> <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-Welcome-green?style=flat-square"></a> <a href="https://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square"></a><br><br><img alt="Python" src="https://img.shields.io/badge/Python 3%20-%2314354C.svg?&style=flat-square&logo=python&logoColor=white"/><a href="https://github.com/ytdl-org/youtube-dl"><img src="https://img.shields.io/badge/Built Using-youtube--dl-yellow?style=flat-square"></a></center>
+<p align=center><img src="https://img.shields.io/github/stars/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/github/forks/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/badge/Category-Music-blue?style=flat-square"> <img src="https://img.shields.io/badge/Category-CLI-green?style=flat-square"> <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-Welcome-green?style=flat-square"></a> <a href="https://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square"></a><br><br><img src="https://img.shields.io/badge/Python 3%20-%2314354C.svg?&style=flat-square&logo=python&logoColor=white"/> <a href="https://github.com/ytdl-org/youtube-dl"><img src="https://img.shields.io/badge/Built Using-youtube--dl-yellow?style=flat-square"></a></p>
 
 
 
@@ -12,9 +12,11 @@ YTMusic is a simple python script to play songs from YouTube in terminal.
 It also supports auto-play and playlists. 😁
 You can also download songs to listen to them offline.
 
+
+
 ### Demo :
 
-![330d99b3-6ad7-4bc8-a603-9dde3d07e3c6](C:\Users\royal\AppData\Local\Temp\330d99b3-6ad7-4bc8-a603-9dde3d07e3c6.gif)
+![demo](demo.gif)
 
 
 
@@ -49,7 +51,18 @@ Windows users need to create `input.conf` in the same folder as the executable.*
 
 ## Usage 💻
 
-![image-20210208202428775](C:\Users\royal\AppData\Roaming\Typora\typora-user-images\image-20210208202428775.png)
+```
+usage: ytmusic.py [-h] [-o] [-a] [-d] [-u]
+
+optional arguments:
+  -h, --help      show this help message and exit
+  -o, --options   Display a list of songs to choose from
+  -a, --autoplay  Start playing similar songs after the requested song or playlist
+  -d, --download  Download the song or playlist instead of playing it. Be careful while passing this
+                  with -a as it can cause a large number of downloads
+  -u, --url       Ask for playlist url instead of song. Play / Download songs from the given url.
+                  Passing -o with it will not work.
+```
 
 
 
@@ -76,7 +89,7 @@ Windows users need to create `input.conf` in the same folder as the executable.*
 
 ## Contact ✉
 
-Ayush Rawal - [GitHub](https://github.com/AyushRawal) - [E-mail](royalrawal.2001@gmail.com) - [Twitter](https://twitter.com/_royal_rawal_)
+​	Ayush Rawal - [GitHub](https://github.com/AyushRawal) - [E-mail](royalrawal.2001@gmail.com) - [Twitter](https://twitter.com/_royal_rawal_)
 
 
 
@@ -84,4 +97,4 @@ _**Note :** Please feel free to ask for a feature or report any bug by opening a
 
 
 
-<center>Made with ❤️ for 🌏 Everyone</center>
+<p align=center>Made with ❤️ for 🌏 Everyone</p>
