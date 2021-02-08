@@ -89,7 +89,7 @@ optional arguments:
 
 ## Contact ✉
 
-​	Ayush Rawal - [GitHub](https://github.com/AyushRawal) - [E-mail](royalrawal.2001@gmail.com) - [Twitter](https://twitter.com/_royal_rawal_)
+​	Ayush Rawal - [GitHub](https://github.com/AyushRawal) - [E-mail](mailto:royalrawal.2001@gmail.com) - [Twitter](https://twitter.com/_royal_rawal_)
 
 
 
