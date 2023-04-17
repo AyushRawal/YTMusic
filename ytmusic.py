@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 import os
-import youtube_dl
+import yt_dlp as yt 
 import argparse
 import prettytable
 from colorama import init, Fore, Style
@@ -27,7 +27,7 @@ ydl_opts = {'outtmpl': '%(title)s.%(ext)s',
             'cachedir' : False
             }
 
-ydl = youtube_dl.YoutubeDL(ydl_opts)
+ydl = yt.YoutubeDL(ydl_opts)
 
 
 played_ids = []
