@@ -1,6 +1,6 @@
 <h1 align=center>YTMusic</h1><br>
 
-<p align=center><img src="https://img.shields.io/github/stars/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/github/forks/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/badge/Category-Music-blue?style=flat-square"> <img src="https://img.shields.io/badge/Category-CLI-green?style=flat-square"> <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-Welcome-green?style=flat-square"></a> <a href="https://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square"></a><br><br><img src="https://img.shields.io/badge/Python 3%20-%2314354C.svg?&style=flat-square&logo=python&logoColor=white"/> <a href="https://github.com/ytdl-org/youtube-dl"><img src="https://img.shields.io/badge/Built Using-youtube--dl-yellow?style=flat-square"></a></p>
+<p align=center><img src="https://img.shields.io/github/stars/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/github/forks/AyushRawal/YTMusic?style=social"> <img src="https://img.shields.io/badge/Category-Music-blue?style=flat-square"> <img src="https://img.shields.io/badge/Category-CLI-green?style=flat-square"> <a href="http://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-Welcome-green?style=flat-square"></a> <a href="https://choosealicense.com/licenses/mit/"><img src="https://img.shields.io/badge/License-MIT-orange?style=flat-square"></a><br><br><img src="https://img.shields.io/badge/Python 3%20-%2314354C.svg?&style=flat-square&logo=python&logoColor=white"/> <a href="https://github.com/yt-dlp/yt-dlp"><img src="https://img.shields.io/badge/Built Using-youtube--dl-yellow?style=flat-square"></a></p>
 
 
 
@@ -22,7 +22,7 @@ You can also download songs to listen to them offline.
 
 I had a potato computer before and opening a browser or some heavy bloated app just to listen to some music.... not good. 😓
 
-Since I use terminal for a lot of my tasks anyway, I wrote this script to play songs from the terminal and still use it even on my new machine. It uses youtube-dl and mpv to stream and download songs. 😎
+Since I use terminal for a lot of my tasks anyway, I wrote this script to play songs from the terminal and still use it even on my new machine. It uses yt-dlp and mpv to stream and download songs. 😎
 
 
 
@@ -34,7 +34,7 @@ Since I use terminal for a lot of my tasks anyway, I wrote this script to play s
 
 **Install all the python dependencies:**
 
-​	`pip install youtube-dl argparse prettytable colorama requests`
+​	`pip install yt-dlp argparse prettytable colorama requests`
 
 ​	You may need to replace pip with pip3 if you are using Linux and python3 is not the default.
 
