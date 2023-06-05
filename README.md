@@ -12,14 +12,6 @@ YTMusic is a simple python script to play songs from YouTube in terminal.
 It also supports auto-play and playlists. 😁
 You can also download songs to listen to them offline.
 
-
-
-### Demo :
-
-![demo](demo.gif)
-
-
-
 I had a potato computer before and opening a browser or some heavy bloated app just to listen to some music.... not good. 😓
 
 Since I use terminal for a lot of my tasks anyway, I wrote this script to play songs from the terminal and still use it even on my new machine. It uses yt-dlp and mpv to stream and download songs. 😎
