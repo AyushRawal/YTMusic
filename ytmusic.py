@@ -3,7 +3,6 @@
 import os
 import yt_dlp as yt 
 import argparse
-import prettytable
 from colorama import init, Fore, Style
 import re
 import requests
@@ -36,15 +35,6 @@ played_ids = []
 def arguments():
 
     parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "-o", "--options",
-        help="Display a list of songs to choose from",
-        action="store_true")
-    parser.add_argument(
-        "-a", "--autoplay",
-        help="Start playing similar songs after the requested song or playlist",
-        action="store_true")
     parser.add_argument(
         "-d", "--download",
         help="Download the song or playlist instead of playing it.\
@@ -96,61 +86,20 @@ def main(args):
 
     init()
 
-    if (not args.url):
-        song_name = input("Enter song name to search for : ")
-        print(("\nSearching {}{}'" + song_name +
-            "'{} on YouTube...").format(Style.BRIGHT,
-                                            Fore.CYAN, Style.RESET_ALL))
-        if args.options:
-            search_query = "ytsearch5:" + song_name
-        else:
-            search_query = "ytsearch:" + song_name
-    else:
-        search_query = input("Enter the playlist url : ")
+    song_name = input("Enter song name to search for : ")
+    print(("\nSearching {}{}'" + song_name +
+              "'{} on YouTube...").format(Style.BRIGHT,
+                                           Fore.CYAN, Style.RESET_ALL))
+    search_query = "ytsearch:" + song_name
 
     try:
         result = ydl.extract_info(
                     search_query, download=False)
     except Exception as e:
         print("\nSomething is wrong.",
-            "Try checking your internet connection.\n [EXCEPTION]", e)
+              "Try checking your internet connection.\n [EXCEPTION]", e)
         exit(1)
-
-    if 'entries' in result:
-        if args.options or args.url:
-            print("\n")
-            table = prettytable.PrettyTable()
-            table.hrules = prettytable.HEADER
-            table.vrules = prettytable.NONE
-            table.field_names = ['S.No', 'Duration', 'Title']
-            table.field_names = [('{}{}' + field_name + '{}').format(
-                Style.BRIGHT, Fore.YELLOW, Style.RESET_ALL)
-                for field_name in table.field_names]
-            table.align = "l"
-            table.right_padding_width = 5
-            for i, entry in enumerate(result['entries'], start=1):
-                table.add_row([i, duration_format(entry['duration']),
-                            entry['title']])
-            print(table)
-    else:
-        print("That didn't work. Try something else..\n")
-        exit(0)
-
     index = 0
-
-    while (args.options and not args.url):
-        try:
-            index = int(input("\nEnter the song number (default:1) : ")) - 1
-        except ValueError:
-            pass
-        if index == -1:
-            print("\nExiting")
-            exit(0)
-        elif (index <= 5 and index >= 0):
-            break
-        else:
-            print ("Wrong Input ! Try Again..")
-
     url = ""
     if not args.url:
         url = download_or_play(result['entries'][index], args.download)
@@ -159,11 +108,10 @@ def main(args):
         for entry in result['entries']:
             url = download_or_play(entry, args.download)
 
-    if args.autoplay:
-        while True:
-            url = next_url(url)
-            result = ydl.extract_info(url, download=False)
-            download_or_play(result, args.download)
+    while True:
+        url = next_url(url)
+        result = ydl.extract_info(url, download=False)
+        download_or_play(result, args.download)
 
 if __name__ == "__main__":
     try:
